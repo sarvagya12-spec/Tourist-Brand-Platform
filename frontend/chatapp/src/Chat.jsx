@@ -5,9 +5,10 @@ function Chat() {
   const [convId, setConvId] = useState("");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [typing, setTyping] = useState(false);
   const socketRef = useRef(null);  
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjllMWMzNWEzMTc0YjAwY2M2ZmNiM2Y0IiwiZW1haWwiOiJtYXhAZXhhbXBsZS5jb20iLCJyb2xlIjoidG91cmlzdCIsImV4cCI6MTc3NjQzMDIwMywidHlwZSI6ImFjY2VzcyJ9.RFBqJ1lDt8nnf1HOMi713asLPkxMiehqFepkBtBqwgk";
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjllMWMzNWEzMTc0YjAwY2M2ZmNiM2Y0IiwiZW1haWwiOiJtYXhAZXhhbXBsZS5jb20iLCJyb2xlIjoidG91cmlzdCIsImV4cCI6MTc3NjUwMjIwMiwidHlwZSI6ImFjY2VzcyJ9.RIjRNYW0d6pojQQ-SJkvKoeCXTVEfenMBLPZwIP-8GE";
 
   useEffect(() => {
     const init = async () => {
@@ -28,7 +29,8 @@ function Chat() {
 
       ws.onmessage = (event) => {
         const parsed = JSON.parse(event.data);
-        setMessages(prev => [...prev, parsed.user_message, parsed.ai_response]);
+        setTyping(false);
+        setMessages(prev => [...prev, parsed.ai_response]);
       };
 
       socketRef.current = ws;  
@@ -41,34 +43,55 @@ function Chat() {
 
   const sendMessage = () => {
     if (!input || !socketRef.current) return;
+    setMessages(prev => [...prev,
+    { role: "user", content: input }]);
+    setTyping(true);
     socketRef.current.send(input);
     setInput("");
   };
 
   return (
-    <div className="chat-container">
-      <h2>Chat</h2>
+  <div className="chat-wrapper">
+
+    <div className="chat-main">
+
+      {/* Header */}
+      <div className="chat-header">
+        AI Travel Assistant 
+      </div>
 
       {/* Messages */}
       <div className="chat-box">
         {messages.map((msg, i) => (
-          <div key={i}>
-            <b>{msg.role}:</b> {msg.content}
+          <div
+            key={i}
+            className={`message ${
+              msg.role === "user" ? "user" : "bot"
+            }`}
+          >
+            {msg.content}
           </div>
         ))}
       </div>
 
       {/* Input */}
-      <input
-  className="chat-input"
-  value={input}
-  onChange={(e) => setInput(e.target.value)}
-/>
-      <button className="chat-button" onClick={sendMessage}>
-  Send
-</button>
+      <div className="chat-input-container">
+        <input
+          className="chat-input"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          placeholder="Ask about your trip..."
+        />
+        <button className="chat-button" onClick={sendMessage}>
+          ➤
+        </button>
+      </div>
+
     </div>
-  );
+
+  </div>
+);
 }
 
 export default Chat;
