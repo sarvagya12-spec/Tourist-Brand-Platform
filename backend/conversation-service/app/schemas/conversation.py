@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
+from enum import Enum
 
 
-class ConversationState(str,Enum):
-    created = "created"
+class ConversationState(str,Enum):      # asyncio ,mmake it function , add in celery 
     active = "active"
     closed = "closed"
 
@@ -13,7 +14,7 @@ class Conversation(BaseModel):
     state:ConversationState
     created_at:datetime
     last_update:datetime
-    metadata: Optional[dict] = {}
+    metadata: Optional[dict] = None
 
 class MessageRole(str,Enum):
     user = "user"
@@ -29,3 +30,5 @@ class Message(BaseModel):
     role: MessageRole
     user_type:UserType
     content:str
+
+    # tenantscope in rag
