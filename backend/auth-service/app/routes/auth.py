@@ -2,8 +2,10 @@ from fastapi import APIRouter, HTTPException
 from app.schemas.user_schema import RegisterUser, LoginUser, RoleUpdate
 from app.database import user_collection
 from app.utils.hashing import hash_password, verify_password
-from app.utils.jwt import access_token, SECRET_KEY
+from app.utils.jwt import access_token, SECRET_KEY ,refresh_token
 from jose import jwt, JWTError
+from fastapi import Depends
+from app.utils.dependencies import get_current_user
 
 router = APIRouter()
 
@@ -34,16 +36,19 @@ async def login(user: LoginUser):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     # Token now contains the confirmed role
-    token = access_token({"email": user.email, "role": db_user["role"]})
-    return {"access_token": token, "role": db_user["role"]}
+    token = access_token({"user_id": str(db_user["_id"]),"email": user.email, "role": db_user["role"]})
+    refresh = refresh_token({"user_id": str(db_user["_id"])})
+    return {"message": "Login successful", "access_token": token, "refresh_token": refresh, "role": db_user["role"]}
+
+
 
 @router.put("/select-role")
-async def select_role(update: RoleUpdate, email: str):
+async def select_role(update: RoleUpdate, user=Depends(get_current_user)):
+    email = user["email"]
+
     result = await user_collection.update_one(
-        {"email": email}, 
+        {"email": email},
         {"$set": {"role": update.role}}
     )
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="User not found")
-        
-    return {"message": f"Successfully switched to {update.role} role"}
+
+    return {"message": f"Switched to {update.role}"}
