@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./Chat.css";
 import { Navbar } from "../components/Navbar";
+import ReactMarkdown from "react-markdown";
 
 function Chat() {
   const [convId, setConvId] = useState("");
@@ -9,7 +10,7 @@ function Chat() {
   const [typing, setTyping] = useState(false);
   const socketRef = useRef(null);  
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjllMWMzNWEzMTc0YjAwY2M2ZmNiM2Y0IiwiZW1haWwiOiJtYXhAZXhhbXBsZS5jb20iLCJyb2xlIjoidG91cmlzdCIsImV4cCI6MTc3NjY4MzQwNSwidHlwZSI6ImFjY2VzcyJ9.SyeSo7ZiuUXbbz4Wy32YXTAVoD0pM5jDJNmsKeIxRdc";
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjllMWMzNWEzMTc0YjAwY2M2ZmNiM2Y0IiwiZW1haWwiOiJtYXhAZXhhbXBsZS5jb20iLCJyb2xlIjoidG91cmlzdCIsImV4cCI6MTc3Njc1NTEyNiwidHlwZSI6ImFjY2VzcyJ9.rLj-k8FmknIXHJKP9mL6uIOmukU6Yo0moLqnT5cn2TY";
 
   useEffect(() => {
     const init = async () => {
@@ -79,7 +80,7 @@ function Chat() {
                 msg.role === "user" ? "user" : "bot"
               }`}
             >
-              {msg.content}
+              <ReactMarkdown>{msg.content}</ReactMarkdown>
             </div>
           ))}
           {typing && (
