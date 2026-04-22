@@ -7,4 +7,3 @@ client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 
 for model in client.models.list():
     print(f"AVAILABLE MODEL: {model.name}")
-
