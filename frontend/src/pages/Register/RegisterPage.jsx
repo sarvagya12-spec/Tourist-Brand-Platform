@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import '../Login/LoginPage.css'; // This reuses the same styling
+import axios from 'axios'
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -11,11 +12,17 @@ const RegisterPage = () => {
     });
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        console.log("Attempting Register:", formData);
-        // Connection to Auth Service (Port 8001) will go here!
-    };
+        try{
+            const res = await axios.post("http://localhost:8001/auth/register", formData);
+            alert(res.data.message);
+            navigate('/login')
+        }catch(err){
+            alert("Registration Failed: " + (err.response?.data?.detail || "Server Error"));
+
+        }
+        };
 
     return (
         <div className="auth-wrapper">

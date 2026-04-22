@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send, Square, Bot } from 'lucide-react';
+import axios from 'axios';
 import Navbar from '../../components/Navbar';
 import './ChatPage.css';
 
@@ -10,25 +11,51 @@ const ChatPage = () => {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  // This will eventually come from your Auth service
-  const user = { name: "Manvi", email: "manvig00123@gmail.com" };
+  // Dynamically get user info from localStorage (saved during Login)
+  const userData = { 
+    name: localStorage.getItem("name") || "User", 
+    email: localStorage.getItem("email") || "Guest",
+    role: localStorage.getItem("role") || "analyst"
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    setMessages([...messages, { role: 'user', content: input }]);
+
+    const userMessage = { role: 'user', content: input };
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsTyping(true);
 
-    // AI Logic would go here (Axios call to Port 8003)
-    setTimeout(() => {
-      setMessages(prev => [...prev, { role: 'assistant', content: "Analysis complete..." }]);
+    try {
+      const token = localStorage.getItem("token");
+      
+      const response = await axios.post("http://localhost:8003/ai/generate", 
+        { prompt: input }, 
+        { 
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          } 
+        }
+      );
+
+      const aiMessage = { role: 'assistant', content: response.data.response };
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("AI Service Error:", error);
+      const errorMessage = { 
+        role: 'assistant', 
+        content: "I'm sorry, I encountered an error connecting to the AI service. Please make sure you are logged in." 
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 2000);
+    }
   };
 
   return (
     <div className="chat-container">
-      <Navbar user={user} onClear={() => setMessages([])} />
+      <Navbar user={userData} onClear={() => setMessages([])} />
 
       <main className="messages-area">
         {messages.map((msg, i) => (

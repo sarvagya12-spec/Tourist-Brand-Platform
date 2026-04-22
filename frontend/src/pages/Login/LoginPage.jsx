@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
+import axios from 'axios';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        console.log("Attempting Login:", { email, password });
-        // Connection to Port 8001 will go here!
+        try{
+            const res = await axios.post("http://localhost:8001/auth/login", { email, password });
+            localStorage.setItem("token", res.data.access_token);
+            localStorage.setItem("role", res.data.role);
+
+            alert("Login Successful!");
+            navigate('/chat');
+        }catch(err){
+            alert("Login Failed: " + (err.response?.data?.detail || "Invalid Credentials"));
+        }
     };
 
     return (
