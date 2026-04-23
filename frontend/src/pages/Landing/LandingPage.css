@@ -19,17 +19,87 @@ html, body {
     min-height: 100vh;
     color: white;
     text-align: center;
-    padding-top: 140px;
+    padding-top: 0;
 }
 
 
-.hero-section {
+/* Container for the 75% height video */
+.hero-video-section {
+    position: relative;
+    width: 100%;
+    height: 97vh; /* This sets it to 75% of the screen height */
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 30px;
-    margin-bottom: 100px;
+    justify-content: center;
 }
+
+/* The video itself */
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This makes the video fill the area without stretching */
+    z-index: 1;
+}
+
+/* Dark tint over the video so text is readable */
+.hero-video-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+       to bottom, 
+       rgba(0, 0, 0, 0.2) 0%, 
+       rgba(2, 6, 23, 0) 50%,  
+       rgba(2, 6, 23, 0.8) 85%, 
+       #020617 100%
+    );
+ /* Adjust darkness here */
+    z-index: 2;
+}
+
+/* Content on top of the video */
+.video-overlay {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-slogan {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    line-height: 1.1;
+    letter-spacing: -0.3px;
+}
+
+.video-cta-btn {
+    background: #82bb00; /* Or your preferred brand color */
+    color: white;
+    padding: 16px 40px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.video-cta-btn:hover {
+    background: #6e9e01;
+    transform: scale(1.05);
+}
+
 
 /* Button & Badge styles like your screenshot */
 .google-btn {
@@ -85,22 +155,29 @@ html, body {
 .landing-navbar {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     height: 80px;
     padding: 0 6%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(2, 6, 23, 0.7);
-    backdrop-filter: blur(12px);
-    z-index: 1000;
+    background: linear-gradient(to bottom, rgba(2, 6, 23, 0.8), transparent);
+    backdrop-filter: blur(8px); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+    z-index: 1000; 
 }
 
 .nav-logo-box { display: flex; align-items: center; gap: 10px; }
 .logo-sq { 
-    width: 32px; height: 32px; 
+   width: 36px; 
+    height: 36px; 
     background: linear-gradient(135deg, #2563eb, #60a5fa); 
-    border-radius: 8px; 
+    border-radius: 10px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
 }
 
 .nav-center { display: flex; gap: 35px; }
@@ -160,4 +237,100 @@ html, body {
 .register-btn:hover {
     background: #e2e8f0;
     transform: scale(1.05);
+}
+/* --- Footer Styles --- */
+.landing-footer {
+    background-color: #020617; /* Deep Navy */
+    border-top: none;
+    padding: 60px 8% 40px;
+    margin-top: 0px;
+    text-align: left;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin-bottom: 80px;
+}
+
+.footer-brand {
+    flex: 1;
+    min-width: 300px;
+}
+
+.footer-desc {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-top: 25px;
+    max-width: 350px;
+}
+
+.footer-links-grid {
+    display: flex;
+    gap: 100px;
+    flex-wrap: wrap;
+}
+
+.footer-col h4 {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+}
+
+.footer-col a {
+    display: block;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    transition: 0.3s ease;
+}
+
+.footer-col a:hover {
+    color: #60a5fa; /* Glow Blue on hover */
+    padding-left: 5px; /* Subtle movement */
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+.footer-legal-links {
+    display: flex;
+    gap: 25px;
+}
+
+.footer-legal-links a {
+    color: #475569;
+    text-decoration: none;
+}
+
+.footer-legal-links a:hover {
+    color: white;
+}
+.ticker-title {
+    margin-bottom: 30px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.ticker-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
 }

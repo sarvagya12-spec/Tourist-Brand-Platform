@@ -5,6 +5,7 @@ import ChatPage from './pages/Chat/ChatPage';
 import './App.css';
 import LoginPage from './pages/Login/LoginPage';
 import RegisterPage from './pages/Register/RegisterPage';
+import OnboardingPage from './pages/Onboarding/OnboardingPage';
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           
           {/* Chat page */}
           <Route path="/chat" element={<ChatPage />} />
+
+          <Route path="/onboarding" element={<OnboardingPage />} />
         </Routes>
       </div>
     </Router>
