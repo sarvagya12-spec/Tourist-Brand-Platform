@@ -10,7 +10,7 @@ function Chat() {
   const [typing, setTyping] = useState(false);
   const socketRef = useRef(null);  
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjllMWMzNWEzMTc0YjAwY2M2ZmNiM2Y0IiwiZW1haWwiOiJtYXhAZXhhbXBsZS5jb20iLCJyb2xlIjoidG91cmlzdCIsImV4cCI6MTc3Njc1NTEyNiwidHlwZSI6ImFjY2VzcyJ9.rLj-k8FmknIXHJKP9mL6uIOmukU6Yo0moLqnT5cn2TY";
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjllMWMzNWEzMTc0YjAwY2M2ZmNiM2Y0IiwiZW1haWwiOiJtYXhAZXhhbXBsZS5jb20iLCJyb2xlIjoidG91cmlzdCIsImV4cCI6MTc3Njc4MjA3NiwidHlwZSI6ImFjY2VzcyJ9.a8WmSF9eIXuKNWegYiWPGNx-VTphZqU_-ddhHVqvHTM";
 
   useEffect(() => {
     const init = async () => {

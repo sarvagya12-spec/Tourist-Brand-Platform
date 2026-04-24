@@ -1,4 +1,4 @@
-import Chat from "./Chat";
+import Chat from "./pages/Chat";
 
 function App() {
   return <Chat />;
